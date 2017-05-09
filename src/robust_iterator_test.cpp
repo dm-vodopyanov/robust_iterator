@@ -36,18 +36,18 @@ protected:
 
     string traverse(Iterator<int>* iterator) {
         string str = "";
-        while (!iterator->isDone()) {
+        while (!iterator->is_done()) {
             Component<int>* item = iterator->next();
             str += item->to_string();
 
-            if (!iterator->isDone())
+            if (!iterator->is_done())
                 str += " ";
         }
         return str;
     }
 };
 
-TEST_F(RobustIteratorTest, can_iterate_over_list) {
+TEST_F(RobustIteratorTest, can_iterate_over_simple_list) {
     add_n_ints_to_root(9);
 
     Iterator<int>* iterator = root->create_iterator();
@@ -55,7 +55,7 @@ TEST_F(RobustIteratorTest, can_iterate_over_list) {
     EXPECT_EQ("0 1 2 3 4 5 6 7 8", traverse(iterator));
 }
 
-TEST_F(RobustIteratorTest, can_iterate_over_composite) {
+TEST_F(RobustIteratorTest, can_iterate_over_nested_list) {
     Group<int>* group = new Group<int>();
     group->add(array[1]);
     group->add(array[2]);
@@ -67,7 +67,7 @@ TEST_F(RobustIteratorTest, can_iterate_over_composite) {
     EXPECT_EQ("1 2 0", traverse(iterator));
 }
 
-TEST_F(RobustIteratorTest, can_iterate_over_composite_of_composites) {
+TEST_F(RobustIteratorTest, can_iterate_over_nested_list_of_nested_lists) {
     Group<int>* nested_group = new Group<int>();
     nested_group->add(array[2]);
     nested_group->add(array[3]);
@@ -177,7 +177,7 @@ TEST_F(RobustIteratorTest, can_remove_from_tail) {
     EXPECT_EQ(array[4], iterator->next());
 }
 
-TEST_F(RobustIteratorTest, can_remove_all_composite) {
+TEST_F(RobustIteratorTest, can_remove_nested_list_and_get_nullptr) {
     Group<int>* group = new Group<int>();
     group->add(array[1]);
     group->add(array[2]);
@@ -193,7 +193,7 @@ TEST_F(RobustIteratorTest, can_remove_all_composite) {
     EXPECT_EQ(nullptr, iterator->next());
 }
 
-TEST_F(RobustIteratorTest, can_remove_root_for_nested_current_item) {
+TEST_F(RobustIteratorTest, can_remove_nested_current_item) {
     Group<int>* nested_group = new Group<int>();
     nested_group->add(array[2]);
     nested_group->add(array[3]);
@@ -213,7 +213,7 @@ TEST_F(RobustIteratorTest, can_remove_root_for_nested_current_item) {
     EXPECT_EQ(array[5], iterator->next());
 }
 
-TEST_F(RobustIteratorTest, can_iterate_over_hard) {
+TEST_F(RobustIteratorTest, can_iterate_over_hard_nested_list) {
     Group<int>* nested_group_1 = new Group<int>();
     nested_group_1->add(array[0]);
     Group<int>* nested_group_2 = new Group<int>();

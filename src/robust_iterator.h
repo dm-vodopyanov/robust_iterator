@@ -1,5 +1,3 @@
-#pragma once
-
 #include <stack>
 #include <map>
 #include <vector>
@@ -14,7 +12,7 @@ template <typename T> class Component;
 template <typename T> class Iterator {
 public:
     virtual Component<T>* next() = 0;
-    virtual bool isDone() = 0;
+    virtual bool is_done() = 0;
 
     Iterator() {}
     virtual ~Iterator() {}
@@ -44,7 +42,7 @@ public:
     Component<T>* owner = nullptr;
 
     virtual Component<T>* next() = 0;
-    virtual bool isDone() = 0;
+    virtual bool is_done() = 0;
     virtual void notify_remove(Component<T>* item) = 0;
 
     virtual Component<T>* get_owner() {
@@ -70,7 +68,7 @@ public:
     	return nullptr; 
     }
 
-    virtual bool isDone() {
+    virtual bool is_done() {
         return true;
     }
 
@@ -125,7 +123,7 @@ public:
         RobustIterator<T>::owner = iterator->get_owner();
     }
 
-    virtual bool isDone() {
+    virtual bool is_done() {
         if (st.size() <= 0) {
             RobustIterator<T>::unsubscribe();
             return true;
@@ -133,16 +131,16 @@ public:
 
         Iterator<T>* iterator = top();
 
-        if (iterator->isDone()) {
+        if (iterator->is_done()) {
             pop();
-            return isDone();
+            return is_done();
         }
 
         return false;
     }
 
     virtual Component<T>* next() {
-        if (isDone()) {
+        if (is_done()) {
             return nullptr;
         }
 
@@ -281,7 +279,7 @@ public:
         Iterator<T>* iterator = new ListIterator<T>(this);
 
         T* prev = nullptr;
-        while (!iterator->isDone()) {
+        while (!iterator->is_done()) {
             T* current = (T*)iterator->next();
             if (current == data) {
                 return prev;
@@ -294,17 +292,17 @@ public:
     T* get_next(T* data) {
         Iterator<T>* iterator = new ListIterator<T>(this);
         if (data == nullptr) {
-            if (iterator->isDone()) {
+            if (iterator->is_done()) {
                 return (T*)iterator->next();
             }
             else {
                 return nullptr;
             }
         }
-        while (iterator->isDone()) {
+        while (iterator->is_done()) {
             T* current = (T*)iterator->next();
             if (current == data) {
-                if (iterator->isDone()) {
+                if (iterator->is_done()) {
                     return (T*)iterator->next();
                 }
                 else {
@@ -363,7 +361,7 @@ public:
         return (Component<T>*)list->get(current - 1);
     }
 
-    virtual bool isDone() {
+    virtual bool is_done() {
         return current != list->count();
     }
 
@@ -415,11 +413,11 @@ public:
     virtual string to_string() {
         string str = "";
         Iterator<T>* iterator = create_iterator();
-        while (!iterator->isDone()) {
+        while (!iterator->is_done()) {
             Component<int>* item = iterator->next();
                 str += item->to_string();
 
-            if (!iterator->isDone())
+            if (!iterator->is_done())
                 str += " ";
         }
         return str;
@@ -446,7 +444,7 @@ public:
         RobustIterator<T>::owner = group;
     }
 
-    virtual bool isDone() {
+    virtual bool is_done() {
         if (list->get_next(current) == nullptr) {
             RobustIterator<T>::unsubscribe();
             return true;
@@ -455,7 +453,7 @@ public:
     }
 
     virtual Component<T>* next() {
-        if (isDone()) {
+        if (is_done()) {
             return nullptr;
         }
         Component<T>* next = list->get_next(current);
