@@ -1,4 +1,7 @@
 ## Robust Iterator
+[![Build Status](https://travis-ci.org/dmitryvodop/robust_iterator.svg?branch=master)](https://travis-ci.org/dmitryvodop/robust_iterator)
+[![The MIT License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
+
 
 **Dmitry Vodopyanov**
 
