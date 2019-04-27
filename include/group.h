@@ -63,10 +63,10 @@ public:
     }
 
     Iterator<T>* create_iterator() {
-        RobustIterator<T>* iterator = new GroupIterator<T>(this);
+        auto iterator(new GroupIterator<T>(this));
         iterators.push_back(iterator);
 
-        RobustIterator<T>* composite_iterator = new CompositeIterator<T>(iterator);
+        auto composite_iterator(new CompositeIterator<T>(iterator));
         iterators.push_back(composite_iterator);
 
         return composite_iterator;

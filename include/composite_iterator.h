@@ -31,36 +31,12 @@ SOFTWARE.
 using namespace std;
 
 template<typename Key, typename Value, typename Arg>
-inline bool map_contains(const std::map< Key, Value > m, const Arg& value) {
+inline bool map_contains(const std::map< Key, Value >& m, const Arg& value) {
     return m.find(value) != m.end();
 }
 
 template <typename T>
 class CompositeIterator : public RobustIterator<T> {
-private:
-    stack<Component<T>*> st;
-    map<Component<T>*, Iterator<T>*> m;
-
-    void push(Component<T>* owner, Iterator<T>* iterator) {
-        st.push(owner);
-        m.insert(std::make_pair(owner, iterator));
-    }
-
-    Iterator<T>* top() {
-        Component<T>* top_owner = st.top();
-        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(top_owner);
-        return it->second;
-    }
-
-    Iterator<T>* pop() {
-        Component<T>* pop_owner = st.top();
-        st.pop();
-        Iterator<T>* iterator = m.at(pop_owner);
-        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(pop_owner);
-        m.erase(it);
-        return iterator;
-    }
-
 public:
     explicit CompositeIterator(RobustIterator<T>* iterator) {
         push(iterator->get_owner(), iterator);
@@ -73,7 +49,7 @@ public:
             return true;
         }
 
-        Iterator<T>* iterator = top();
+        auto iterator = top();
 
         if (iterator->is_done()) {
             pop();
@@ -87,8 +63,8 @@ public:
             return nullptr;
         }
 
-        Iterator<T>* iterator = top();
-        Component<T>* component = iterator->next();
+        auto iterator = top();
+        auto component = iterator->next();
         if (component->is_composite()) {
             push(component, component->create_iterator());
             return next();
@@ -100,6 +76,32 @@ public:
         while (map_contains(m, item)) {  // replace with m.contains(item) (C++20) when
             pop();                       // will available in official clang/gcc
         }
+    }
+
+private:
+    stack<Component<T>*> st;
+    map<Component<T>*, Iterator<T>*> m;
+
+    void push(Component<T>* owner, Iterator<T>* iterator) {
+        st.push(owner);
+        m.insert(std::make_pair(owner, iterator));
+    }
+
+    Iterator<T>* top() {
+        auto top_owner(st.top());
+        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(top_owner);
+        return (it != m.end()) ? it->second : nullptr;
+    }
+
+    Iterator<T>* pop() {
+        auto pop_owner(st.top());
+        st.pop();
+        auto iterator = m.at(pop_owner);
+        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(pop_owner);
+        if (it != m.end()) {
+            m.erase(it);
+        }
+        return iterator;
     }
 };
 

@@ -41,7 +41,7 @@ public:
 
     ~List() {
         if (pRoot != nullptr) {
-            Node<T>* tmp = pRoot;
+            Node<T>* tmp(pRoot);
             while (pRoot != nullptr) {
                 tmp = pRoot->next;
                 delete pRoot;
@@ -51,7 +51,7 @@ public:
     }
 
     void add(T* data) {
-        auto tmp = new Node<T>(data);
+        auto tmp(new Node<T>(data));
         if (pRoot == nullptr) {
             pRoot = pTail = tmp;
         }
@@ -63,7 +63,7 @@ public:
     }
 
     Node<T>* find(T* data) {
-        Node<T>* tmp = pRoot;
+        auto tmp(pRoot);
         while (tmp != nullptr) {
             if (tmp->data == data)
                 return tmp;
@@ -73,9 +73,9 @@ public:
     }
 
     Node<T>* insert(T* key, T* data) {
-        Node<T>* pKey = find(key);
+        auto pKey(find(key));
         if (pKey) {
-            auto pNode = new Node<T>(data);
+            auto pNode(new Node<T>(data));
             pNode->next = pKey->next;
             pKey->next = pNode;
             return pNode;
@@ -84,7 +84,7 @@ public:
     }
 
     T* get(int key) {
-        Node<T>* tmp = pRoot;
+        auto tmp(pRoot);
         int i = 0;
         while (tmp != nullptr) {
             if (i == key)
@@ -96,7 +96,7 @@ public:
     }
 
     T* get_prev(T* data) {
-        auto iterator = new ListIterator<T>(this);
+        auto iterator(new ListIterator<T>(this));
 
         T* prev = nullptr;
         while (!iterator->is_done()) {
@@ -110,7 +110,7 @@ public:
     }
 
     T* get_next(T* data) {
-        auto iterator = new ListIterator<T>(this);
+        auto iterator(new ListIterator<T>(this));
         if (data == nullptr) {
             return (iterator->is_done()) ? (T*)(iterator->next()) : nullptr;
         }
@@ -134,7 +134,7 @@ public:
     }
 
     bool remove(T* data) {
-        auto pKey = find(data);
+        auto pKey(find(data));
         if (pKey) {
             if (pKey == pRoot)
                 pRoot = pKey->next;

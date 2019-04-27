@@ -41,8 +41,8 @@ protected:
     }
 
     ~RobustIteratorTest() override {
-        root = nullptr;
-        array = nullptr;
+        delete root;
+        delete[] array;
     }
 
     void SetUp() override {

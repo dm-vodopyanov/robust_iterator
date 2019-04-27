@@ -31,7 +31,7 @@ public:
     explicit ListIterator(List<T>* list_) : list(list_) {}
 
     Component<T>* next() override {
-        current++;
+        ++current;
         return (Component<T>*)list->get(current - 1);
     }
 
