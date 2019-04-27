@@ -26,17 +26,26 @@ SOFTWARE.
 #define GROUP_H_
 
 #include <vector>
+#include <memory>
 #include <algorithm>
 
-template <typename T> class CompositeIterator;
-template <typename T> class RobustIterator;
-template <typename T> class GroupIterator;
-template <typename T> class List;
+template <typename T>
+class CompositeIterator;
 
-template <typename T> class Group : public Component<T> {
+template <typename T>
+class RobustIterator;
+
+template <typename T>
+class GroupIterator;
+
+template <typename T>
+class List;
+
+template <typename T>
+class Group : public Component<T> {
 private:
     List<Component<T>>* components = new List<Component<T>>();
-    vector<RobustIterator<T>*> iterators;
+    std::vector<RobustIterator<T>*> iterators;
 
 public:
     void add(Component<T>* item) {
@@ -44,8 +53,8 @@ public:
     }
 
     void remove(Component<T>* item) {
-        for (int i = 0; i < iterators.size(); i++)
-            iterators[i]->notify_remove(item);
+        for (auto iterator: iterators)
+            iterator->notify_remove(item);
         components->remove(item);
     }
 
@@ -67,8 +76,8 @@ public:
         return true;
     }
 
-    virtual string to_string() {
-        string str = "";
+    virtual std::string to_string() {
+        std::string str;
         Iterator<T>* iterator = create_iterator();
         while (!iterator->is_done()) {
             Component<int>* item = iterator->next();
@@ -81,7 +90,7 @@ public:
     }
 
     void unsubscribe(RobustIterator<T>* iterator) {
-        typename vector<RobustIterator<T>*>::iterator it = std::find(iterators.begin(), iterators.end(), iterator);
+        typename std::vector<RobustIterator<T>*>::iterator it = std::find(iterators.begin(), iterators.end(), iterator);
         if (it != iterators.end())
             iterators.erase(it);
     }

@@ -25,21 +25,23 @@ SOFTWARE.
 #ifndef NULL_ITERATOR_H_
 #define NULL_ITERATOR_H_
 
-template <typename T> class NullIterator : public RobustIterator<T> {
+template <typename T>
+class NullIterator : public RobustIterator<T> {
 public:
-    virtual Component<T>* next() {
+    NullIterator() = default;
+    virtual ~NullIterator() = default;
+
+    Component<T>* next() override {
         return nullptr;
     }
 
-    virtual bool is_done() {
+    bool is_done() override {
         return true;
     }
 
-    virtual void notify_remove(Component<T>* item) {
-        return;
-    }
+    void notify_remove(Component<T>* item) override {}
 
-    virtual Component<T>* get_owner() {
+    Component<T>* get_owner() override {
         return nullptr;
     }
 };

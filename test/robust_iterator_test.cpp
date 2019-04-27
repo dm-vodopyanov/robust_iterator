@@ -23,19 +23,17 @@ SOFTWARE.
 */
 
 #include <iostream>
+#include <memory>
 
 #include "iterator.h"
 #include "gtest/gtest.h"
 
-using namespace std;
-
 class RobustIteratorTest : public ::testing::Test {
 protected:
-    Group<int>* root;
+    Group<int>* root = nullptr;
     Data<int>** array;
 
     RobustIteratorTest() {
-        root = nullptr;
         array = new Data<int>*[10];
         for (int i = 0; i < 10; i++) {
             array[i] = new Data<int>(i);

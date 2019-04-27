@@ -37,9 +37,11 @@ SOFTWARE.
 #include "null_iterator.h"
 #include "list_iterator.h"
 
-template <typename T> class Component;
+template <typename T>
+class Component;
 
-template <typename T> class Iterator {
+template <typename T>
+class Iterator {
 public:
     virtual Component<T>* next() = 0;
     virtual bool is_done() = 0;

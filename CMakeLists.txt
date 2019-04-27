@@ -28,7 +28,7 @@ include(gtest.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories(include)
 

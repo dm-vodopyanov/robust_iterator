@@ -35,14 +35,15 @@ inline bool map_contains(const std::map< Key, Value > m, const Arg& value) {
     return m.find(value) != m.end();
 }
 
-template <typename T> class CompositeIterator : public RobustIterator<T> {
+template <typename T>
+class CompositeIterator : public RobustIterator<T> {
 private:
     stack<Component<T>*> st;
     map<Component<T>*, Iterator<T>*> m;
 
     void push(Component<T>* owner, Iterator<T>* iterator) {
         st.push(owner);
-        m.insert(pair<Component<T>*, Iterator<T>*>(owner, iterator));
+        m.insert(std::make_pair(owner, iterator));
     }
 
     Iterator<T>* top() {
@@ -57,7 +58,6 @@ private:
         Iterator<T>* iterator = m.at(pop_owner);
         typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(pop_owner);
         m.erase(it);
-
         return iterator;
     }
 
@@ -67,7 +67,7 @@ public:
         RobustIterator<T>::owner = iterator->get_owner();
     }
 
-    virtual bool is_done() {
+    bool is_done() override {
         if (st.size() <= 0) {
             RobustIterator<T>::unsubscribe();
             return true;
@@ -79,11 +79,10 @@ public:
             pop();
             return is_done();
         }
-
         return false;
     }
 
-    virtual Component<T>* next() {
+    Component<T>* next() override {
         if (is_done()) {
             return nullptr;
         }
@@ -94,13 +93,12 @@ public:
             push(component, component->create_iterator());
             return next();
         }
-
         return component;
     }
 
-    virtual void notify_remove(Component<T>* item) {
-        while (map_contains(m, item)) {
-            pop();
+    void notify_remove(Component<T>* item) override {
+        while (map_contains(m, item)) {  // replace with m.contains(item) (C++20) when
+            pop();                       // will available in official clang/gcc
         }
     }
 };

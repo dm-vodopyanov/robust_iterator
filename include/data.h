@@ -25,29 +25,28 @@ SOFTWARE.
 #ifndef DATA_H_
 #define DATA_H_
 
-template <typename T> class NullIterator;
+template <typename T>
+class NullIterator;
 
-template <typename T> class Data : public Component<T> {
+template <typename T>
+class Data : public Component<T> {
 public:
     T data;
 
-    Data(T _data = 0) {
-        data = _data;
-    }
+    explicit Data(T data_ = 0) : data(data_) {};
+    virtual ~Data() = default;
 
-    virtual Iterator<T>* create_iterator() {
+    Iterator<T>* create_iterator() override {
         return new NullIterator<T>();
     }
 
-    virtual bool is_composite() {
+    bool is_composite() override {
         return false;
     }
 
-    virtual string to_string() {
+    std::string to_string() override {
         return std::to_string(data);
     }
-
-    virtual ~Data() {}
 };
 
 #endif  // DATA_H_

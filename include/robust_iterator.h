@@ -25,9 +25,13 @@ SOFTWARE.
 #ifndef ROBUST_ITERATOR_H_
 #define ROBUST_ITERATOR_H_
 
-template <typename T> class RobustIterator : public Iterator<T> {
+template <typename T>
+class RobustIterator : public Iterator<T> {
 public:
     Component<T>* owner = nullptr;
+
+    RobustIterator() = default;
+    virtual ~RobustIterator() = default;
 
     virtual Component<T>* next() = 0;
     virtual bool is_done() = 0;
@@ -43,8 +47,6 @@ public:
             group->unsubscribe(this);
         }
     }
-
-    RobustIterator() = default;
 };
 
 #endif  // ROBUST_ITERATOR_H_

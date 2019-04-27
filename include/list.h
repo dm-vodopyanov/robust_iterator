@@ -25,18 +25,19 @@ SOFTWARE.
 #ifndef LIST_H_
 #define LIST_H_
 
-template <typename T> class ListIterator;
-template <typename T> class Node;
+template <typename T>
+class ListIterator;
 
-template <typename T> class List {
+template <typename T>
+class Node;
+
+template <typename T>
+class List {
 public:
     Node<T>* pRoot;
     Node<T>* pTail;
 
-    List() {
-        pRoot = nullptr;
-        pTail = nullptr;
-    }
+    List() : pRoot(nullptr), pTail(nullptr) {}
 
     ~List() {
         if (pRoot != nullptr) {
@@ -91,15 +92,15 @@ public:
             tmp = tmp->next;
             i++;
         }
-        return tmp->data;
+        return (tmp != nullptr) ? tmp->data : nullptr;
     }
 
     T* get_prev(T* data) {
-        Iterator<T>* iterator = new ListIterator<T>(this);
+        auto iterator = new ListIterator<T>(this);
 
         T* prev = nullptr;
         while (!iterator->is_done()) {
-            T* current = (T*)iterator->next();
+            auto current = (T*)(iterator->next());
             if (current == data) {
                 return prev;
             }
@@ -109,55 +110,45 @@ public:
     }
 
     T* get_next(T* data) {
-        Iterator<T>* iterator = new ListIterator<T>(this);
+        auto iterator = new ListIterator<T>(this);
         if (data == nullptr) {
-            if (iterator->is_done()) {
-                return (T*)iterator->next();
-            }
-            else {
-                return nullptr;
-            }
+            return (iterator->is_done()) ? (T*)(iterator->next()) : nullptr;
         }
         while (iterator->is_done()) {
-            T* current = (T*)iterator->next();
+            auto current = (T*)(iterator->next());
             if (current == data) {
-                if (iterator->is_done()) {
-                    return (T*)iterator->next();
-                }
-                else {
-                    return nullptr;
-                }
+                return (iterator->is_done()) ? (T*)(iterator->next()) : nullptr;
             }
         }
         return nullptr;
     }
 
     int count() {
-        Node<T>* tmp = pRoot;
+        auto tmp = pRoot;
         int count = 0;
         while (tmp != nullptr) {
-            count++;
+            ++count;
             tmp = tmp->next;
         }
         return count;
     }
 
     bool remove(T* data) {
-        Node<T>* pKey = find(data);
+        auto pKey = find(data);
         if (pKey) {
             if (pKey == pRoot)
                 pRoot = pKey->next;
             else {
-                Node<T>* tmp = pRoot;
+                auto tmp = pRoot;
                 while (tmp != nullptr) {
                     if (tmp->next == pKey) {
                         break;
                     }
                     tmp = tmp->next;
                 }
-                tmp->next = pKey->next;
-                if (tmp == pTail)
-                    tmp = pTail;
+                if (tmp) {
+                    tmp->next = pKey->next;
+                }
             }
             delete pKey;
             return true;

@@ -25,7 +25,8 @@ SOFTWARE.
 #ifndef GROUP_ITERATOR_H_
 #define GROUP_ITERATOR_H_
 
-template <typename T> class GroupIterator : public RobustIterator<T> {
+template <typename T>
+class GroupIterator : public RobustIterator<T> {
 private:
     List<Component<T>>* list;
     Component<T>* current = nullptr;
@@ -35,8 +36,9 @@ public:
         list = group->get();
         RobustIterator<T>::owner = group;
     }
+    virtual ~GroupIterator() = default;
 
-    virtual bool is_done() {
+    bool is_done() override {
         if (list->get_next(current) == nullptr) {
             RobustIterator<T>::unsubscribe();
             return true;
@@ -44,17 +46,16 @@ public:
         return false;
     }
 
-    virtual Component<T>* next() {
+    Component<T>* next() override {
         if (is_done()) {
             return nullptr;
         }
         Component<T>* next = list->get_next(current);
         current = next;
-
         return next;
     }
 
-    virtual void notify_remove(Component<T>* item) {
+    void notify_remove(Component<T>* item) override {
         if (current != item) {
             return;
         }
