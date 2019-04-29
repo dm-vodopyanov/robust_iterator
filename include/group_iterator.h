@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,6 @@ SOFTWARE.
 
 template <typename T>
 class GroupIterator : public RobustIterator<T> {
-private:
-    List<Component<T>>* list;
-    Component<T>* current = nullptr;
-
 public:
     explicit GroupIterator(Group<T>* group) {
         list = group->get();
@@ -61,6 +57,10 @@ public:
         }
         current = list->get_prev(current);
     }
+
+private:
+    List<Component<T>>* list;
+    Component<T>* current = nullptr;
 };
 
 #endif  // GROUP_ITERATOR_H_

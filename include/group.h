@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,10 +43,6 @@ class List;
 
 template <typename T>
 class Group : public Component<T> {
-private:
-    List<Component<T>>* components = new List<Component<T>>();
-    std::vector<RobustIterator<T>*> iterators;
-
 public:
     void add(Component<T>* item) {
         components->add(item);
@@ -78,9 +74,9 @@ public:
 
     virtual std::string to_string() {
         std::string str;
-        Iterator<T>* iterator = create_iterator();
+        std::unique_ptr<Iterator<T>> iterator(create_iterator());
         while (!iterator->is_done()) {
-            Component<int>* item = iterator->next();
+            std::unique_ptr<Component<int>> item(iterator->next());
             str += item->to_string();
 
             if (!iterator->is_done())
@@ -94,6 +90,10 @@ public:
         if (it != iterators.end())
             iterators.erase(it);
     }
+
+private:
+    List<Component<T>>* components = new List<Component<T>>();
+    std::vector<RobustIterator<T>*> iterators;
 };
 
 #endif  // GROUP_H_

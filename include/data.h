@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,6 @@ class NullIterator;
 template <typename T>
 class Data : public Component<T> {
 public:
-    T data;
-
     explicit Data(T data_ = 0) : data(data_) {};
     virtual ~Data() = default;
 
@@ -47,6 +45,9 @@ public:
     std::string to_string() override {
         return std::to_string(data);
     }
+
+private:
+    T data;
 };
 
 #endif  // DATA_H_

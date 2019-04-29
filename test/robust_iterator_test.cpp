@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,10 +59,10 @@ protected:
         }
     }
 
-    string traverse(Iterator<int>* iterator) {
+    string traverse(std::unique_ptr<Iterator<int>> iterator) {
         string str;
         while (!iterator->is_done()) {
-            Component<int>* item = iterator->next();
+            std::unique_ptr<Component<int>> item(iterator->next());
             str += item->to_string();
 
             if (!iterator->is_done())
@@ -75,9 +75,9 @@ protected:
 TEST_F(RobustIteratorTest, can_iterate_over_simple_list) {
     add_n_ints_to_root(9);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
-    EXPECT_EQ("0 1 2 3 4 5 6 7 8", traverse(iterator));
+    EXPECT_EQ("0 1 2 3 4 5 6 7 8", traverse(std::move(iterator)));
 }
 
 TEST_F(RobustIteratorTest, can_iterate_over_nested_list) {
@@ -87,9 +87,9 @@ TEST_F(RobustIteratorTest, can_iterate_over_nested_list) {
     root->add(group);
     add_n_ints_to_root(1);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
-    EXPECT_EQ("1 2 0", traverse(iterator));
+    EXPECT_EQ("1 2 0", traverse(std::move(iterator)));
 }
 
 TEST_F(RobustIteratorTest, can_iterate_over_nested_list_of_nested_lists) {
@@ -105,9 +105,9 @@ TEST_F(RobustIteratorTest, can_iterate_over_nested_list_of_nested_lists) {
     root->add(group);
     root->add(array[5]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
-    EXPECT_EQ("1 2 3 4 5", traverse(iterator));
+    EXPECT_EQ("1 2 3 4 5", traverse(std::move(iterator)));
 }
 
 TEST_F(RobustIteratorTest, can_ignore_addition_to_left_side_of_iter_ptr) {
@@ -117,7 +117,7 @@ TEST_F(RobustIteratorTest, can_ignore_addition_to_left_side_of_iter_ptr) {
     root->add(array[3]);
     root->add(array[4]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     EXPECT_EQ(array[3], iterator->next());
@@ -131,7 +131,7 @@ TEST_F(RobustIteratorTest, can_add_to_right_side_of_iter_ptr_and_then_iterate) {
     root->add(group);
     root->add(array[3]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     group->add(array[2]);
@@ -146,7 +146,7 @@ TEST_F(RobustIteratorTest, can_add_and_remove_more_than_one_items) {
     root->add(array[3]);
     root->add(array[4]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     EXPECT_EQ(array[3], iterator->next());
@@ -163,7 +163,7 @@ TEST_F(RobustIteratorTest, can_remove_from_head) {
     root->add(group);
     root->add(array[4]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     EXPECT_EQ(array[2], iterator->next());
@@ -178,7 +178,7 @@ TEST_F(RobustIteratorTest, can_remove_current_item) {
     root->add(group);
     root->add(array[3]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     EXPECT_EQ(array[2], iterator->next());
@@ -194,7 +194,7 @@ TEST_F(RobustIteratorTest, can_remove_from_tail) {
     root->add(group);
     root->add(array[4]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     group->remove(array[3]);
@@ -210,7 +210,7 @@ TEST_F(RobustIteratorTest, can_remove_nested_list_and_get_nullptr) {
     root->add(group);
     root->add(array[4]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     root->remove(group);
     root->remove(array[4]);
@@ -230,7 +230,7 @@ TEST_F(RobustIteratorTest, can_remove_nested_current_item) {
     root->add(group);
     root->add(array[5]);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
     EXPECT_EQ(array[1], iterator->next());
     EXPECT_EQ(array[2], iterator->next());
@@ -263,9 +263,9 @@ TEST_F(RobustIteratorTest, can_iterate_over_hard_nested_list) {
 
     root->add(nested_group_1);
 
-    Iterator<int>* iterator = root->create_iterator();
+    std::unique_ptr<Iterator<int>> iterator(root->create_iterator());
 
-    EXPECT_EQ("0 1 2 3 4 5 6 7 8 9", traverse(iterator));
+    EXPECT_EQ("0 1 2 3 4 5 6 7 8 9", traverse(std::move(iterator)));
 }
 
 int main(int argc, char **argv) {

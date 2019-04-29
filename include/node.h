@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,11 @@ SOFTWARE.
 template <typename T>
 class Node {
 public:
+    explicit Node(T* data_ = 0) : data(data_), prev(nullptr), next(nullptr) {}
+
     T* data;
     Node<T>* prev;
     Node<T>* next;
-
-    explicit Node(T* data_ = 0) : data(data_), prev(nullptr), next(nullptr) {}
 };
 
 #endif  // NODE_H_

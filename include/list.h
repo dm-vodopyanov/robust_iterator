@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,6 @@ class Node;
 template <typename T>
 class List {
 public:
-    Node<T>* pRoot;
-    Node<T>* pTail;
-
     List() : pRoot(nullptr), pTail(nullptr) {}
 
     ~List() {
@@ -96,7 +93,7 @@ public:
     }
 
     T* get_prev(T* data) {
-        auto iterator(new ListIterator<T>(this));
+        std::unique_ptr<ListIterator<T>> iterator(new ListIterator<T>(this));
 
         T* prev = nullptr;
         while (!iterator->is_done()) {
@@ -110,7 +107,7 @@ public:
     }
 
     T* get_next(T* data) {
-        auto iterator(new ListIterator<T>(this));
+        std::unique_ptr<ListIterator<T>> iterator(new ListIterator<T>(this));
         if (data == nullptr) {
             return (iterator->is_done()) ? (T*)(iterator->next()) : nullptr;
         }
@@ -155,6 +152,10 @@ public:
         }
         return false;
     }
+
+private:
+    Node<T>* pRoot;
+    Node<T>* pTail;
 };
 
 #endif  // LIST_H_

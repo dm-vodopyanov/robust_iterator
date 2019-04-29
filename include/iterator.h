@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Dmitry Vodopyanov
+Copyright (c) 2019 Dmitry Vodopyanov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,11 +43,11 @@ class Component;
 template <typename T>
 class Iterator {
 public:
-    virtual Component<T>* next() = 0;
-    virtual bool is_done() = 0;
-
     Iterator() = default;
     virtual ~Iterator() = default;
+
+    virtual Component<T>* next() = 0;
+    virtual bool is_done() = 0;
 };
 
 #endif  // ITERATOR_H_
