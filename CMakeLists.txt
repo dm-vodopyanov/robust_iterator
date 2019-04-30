@@ -34,4 +34,10 @@ include_directories(include)
 
 add_executable(robust_iterator_test ${PROJECT_SOURCE_DIR}/test/robust_iterator_test.cpp)
 
-target_link_libraries(robust_iterator_test gtest)
+if(LINUX)
+    set(PTHREAD_LIB pthread)
+else(LINUX)
+    set(PTHREAD_LIB "")
+endif(LINUX)
+
+target_link_libraries(robust_iterator_test gtest ${PTHREAD_LIB})
