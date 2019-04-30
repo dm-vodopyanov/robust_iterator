@@ -21,3 +21,7 @@ build_script:
 
 test_script:
   - '%CONFIGURATION%\robust_iterator_test.exe'
+
+on_finish:
+  - cd ..
+  - RMDIR /s /q build
