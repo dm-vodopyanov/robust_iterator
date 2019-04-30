@@ -1,0 +1,23 @@
+image: Visual Studio 2017
+
+platform:
+  - x64
+  - x86
+
+configuration:
+  - Debug
+  - Release
+
+install:
+  - git submodule update --init --recursive
+
+before_build:
+  - mkdir build
+  - cd build
+  - cmake .. %CMAKE_CONFIGURE_FLAGS%
+
+build_script:
+  - cmake --build . %CMAKE_BUILD_FLAGS%
+
+test_script:
+  - '%APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\robust_iterator_test.exe'
