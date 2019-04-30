@@ -25,6 +25,7 @@ install:
 before_build:
   - mkdir build
   - cd build
+  - echo %CMAKE_BUILD_FLAGS%
   - cmake .. %CMAKE_CONFIGURE_FLAGS%
 
 build_script:
