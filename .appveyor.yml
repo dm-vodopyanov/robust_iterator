@@ -5,8 +5,8 @@ platform:
   - x86
 
 configuration:
-  - Debug
   - Release
+  - Debug
 
 install:
   - git submodule update --init --recursive
@@ -21,7 +21,3 @@ build_script:
 
 test_script:
   - '%CONFIGURATION%\robust_iterator_test.exe'
-
-on_finish:
-  - cd ..
-  - RMDIR /s /q build
