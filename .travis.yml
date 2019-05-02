@@ -10,21 +10,12 @@ compiler:
   - gcc
 
 env:
-  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
-  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
-  - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-  - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-
-matrix:
-  exclude:
-    - os:  osx
-      env: TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-    - os:  osx
-      env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+  - BUILD_CONFIGURATION=Debug
+  - BUILD_CONFIGURATION=Release
 
 script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
-  - cmake --build .
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+  - cmake --build . --config %BUILD_CONFIGURATION%
   - ./robust_iterator_test
