@@ -8,13 +8,13 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       VS_VERSION: 14 2015
-      VS_PLATFORM: win32
+      VS_PLATFORM: Win32
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       VS_VERSION: 14 2015
       VS_PLATFORM: x64
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       VS_VERSION: 15 2017
-      VS_PLATFORM: win32
+      VS_PLATFORM: Win32
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       VS_VERSION: 15 2017
       VS_PLATFORM: x64
@@ -26,10 +26,10 @@ before_build:
   - mkdir build
   - cd build
   - echo %CMAKE_BUILD_FLAGS%
-  - cmake .. %CMAKE_CONFIGURE_FLAGS%
+  - cmake .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -G "Visual Studio %VS_VERSION%" -A %VS_PLATFORM%
 
 build_script:
-  - cmake --build . %CMAKE_BUILD_FLAGS%
+  - cmake --build . --config %CONFIGURATION%
 
 test_script:
   - '%CONFIGURATION%\robust_iterator_test.exe'
