@@ -28,14 +28,16 @@ SOFTWARE.
 template <typename T>
 class RobustIterator : public Iterator<T> {
 public:
-    Component<T>* owner = nullptr;
-
     RobustIterator() = default;
     virtual ~RobustIterator() = default;
 
     virtual Component<T>* next() = 0;
     virtual bool is_done() = 0;
     virtual void notify_remove(Component<T>* item) = 0;
+
+    void set_owner(Component<T>* owner_) {
+        owner = owner_;
+    }
 
     virtual Component<T>* get_owner() {
         return owner;
@@ -47,6 +49,9 @@ public:
             group->unsubscribe(this);
         }
     }
+
+private:
+    Component<T>* owner = nullptr;
 };
 
 #endif  // ROBUST_ITERATOR_H_

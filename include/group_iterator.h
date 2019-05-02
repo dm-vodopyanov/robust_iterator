@@ -28,9 +28,10 @@ SOFTWARE.
 template <typename T>
 class GroupIterator : public RobustIterator<T> {
 public:
+    GroupIterator() = default;
     explicit GroupIterator(Group<T>* group) {
         list = group->get();
-        RobustIterator<T>::owner = group;
+        RobustIterator<T>::set_owner(group);
     }
     virtual ~GroupIterator() = default;
 

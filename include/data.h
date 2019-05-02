@@ -31,7 +31,8 @@ class NullIterator;
 template <typename T>
 class Data : public Component<T> {
 public:
-    explicit Data(T data_ = 0) : data(data_) {};
+    Data() : data() {};
+    explicit Data(T data_) : data(data_) {};
     virtual ~Data() = default;
 
     Iterator<T>* create_iterator() override {

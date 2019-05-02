@@ -59,8 +59,8 @@ protected:
         }
     }
 
-    string traverse(std::unique_ptr<Iterator<int>> iterator) {
-        string str;
+    std::string traverse(std::unique_ptr<Iterator<int>> iterator) {
+        std::string str;
         while (!iterator->is_done()) {
             std::unique_ptr<Component<int>> item(iterator->next());
             str += item->to_string();

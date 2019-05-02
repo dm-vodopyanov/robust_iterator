@@ -29,6 +29,7 @@ template <typename T>
 class ListIterator : public Iterator<T> {
 public:
     explicit ListIterator(List<T>* list_) : list(list_) {}
+    virtual ~ListIterator() = default;
 
     Component<T>* next() override {
         ++current;

@@ -28,11 +28,12 @@ SOFTWARE.
 template <typename T>
 class Node {
 public:
-    explicit Node(T* data_ = 0) : data(data_), prev(nullptr), next(nullptr) {}
+    explicit Node(T* data_) : data(data_) {}
+    ~Node() = default;
 
     T* data;
-    Node<T>* prev;
-    Node<T>* next;
+    Node<T>* prev = nullptr;
+    Node<T>* next = nullptr;
 };
 
 #endif  // NODE_H_

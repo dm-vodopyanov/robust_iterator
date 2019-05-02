@@ -28,8 +28,6 @@ SOFTWARE.
 #include <stack>
 #include <map>
 
-using namespace std;
-
 template<typename Key, typename Value, typename Arg>
 inline bool map_contains(const std::map< Key, Value >& m, const Arg& value) {
     return m.find(value) != m.end();
@@ -40,8 +38,9 @@ class CompositeIterator : public RobustIterator<T> {
 public:
     explicit CompositeIterator(RobustIterator<T>* iterator) {
         push(iterator->get_owner(), iterator);
-        RobustIterator<T>::owner = iterator->get_owner();
+        RobustIterator<T>::set_owner(iterator->get_owner());
     }
+    virtual ~CompositeIterator() = default;
 
     bool is_done() override {
         if (st.size() <= 0) {
@@ -79,8 +78,8 @@ public:
     }
 
 private:
-    stack<Component<T>*> st;
-    map<Component<T>*, Iterator<T>*> m;
+    std::stack<Component<T>*> st;
+    std::map<Component<T>*, Iterator<T>*> m;
 
     void push(Component<T>* owner, Iterator<T>* iterator) {
         st.push(owner);
@@ -89,7 +88,7 @@ private:
 
     Iterator<T>* top() {
         auto top_owner(st.top());
-        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(top_owner);
+        auto it = m.find(top_owner);
         return (it != m.end()) ? it->second : nullptr;
     }
 
@@ -97,7 +96,7 @@ private:
         auto pop_owner(st.top());
         st.pop();
         auto iterator = m.at(pop_owner);
-        typename std::map<Component<T>*, Iterator<T>*>::iterator it = m.find(pop_owner);
+        auto it = m.find(pop_owner);
         if (it != m.end()) {
             m.erase(it);
         }

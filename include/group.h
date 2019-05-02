@@ -44,6 +44,9 @@ class List;
 template <typename T>
 class Group : public Component<T> {
 public:
+    Group() = default;
+    virtual ~Group() = default;
+
     void add(Component<T>* item) {
         components->add(item);
     }
@@ -86,7 +89,7 @@ public:
     }
 
     void unsubscribe(RobustIterator<T>* iterator) {
-        typename std::vector<RobustIterator<T>*>::iterator it = std::find(iterators.begin(), iterators.end(), iterator);
+        auto it = std::find(iterators.begin(), iterators.end(), iterator);
         if (it != iterators.end())
             iterators.erase(it);
     }

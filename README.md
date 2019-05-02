@@ -15,10 +15,11 @@ For instance, to iterate over:
 - simple linked list: ```[0, 1, 2, 3, 4, 5]```,
 - nested linked list: ```[0, [1, 2], 3, [4], 5]```.
 
-#### Requirements:
+#### Requirements
 
 - [GoogleTest](https://github.com/google/googletest)
 
 
-## License
+#### License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdmitryvodop%2Frobust_iterator.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdmitryvodop%2Frobust_iterator?ref=badge_large)

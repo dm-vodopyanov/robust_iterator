@@ -34,11 +34,11 @@ class Node;
 template <typename T>
 class List {
 public:
-    List() : pRoot(nullptr), pTail(nullptr) {}
+    List() = default;
 
     ~List() {
         if (pRoot != nullptr) {
-            Node<T>* tmp(pRoot);
+            auto tmp(pRoot);
             while (pRoot != nullptr) {
                 tmp = pRoot->next;
                 delete pRoot;
@@ -94,7 +94,6 @@ public:
 
     T* get_prev(T* data) {
         std::unique_ptr<ListIterator<T>> iterator(new ListIterator<T>(this));
-
         T* prev = nullptr;
         while (!iterator->is_done()) {
             auto current = (T*)(iterator->next());
@@ -154,8 +153,8 @@ public:
     }
 
 private:
-    Node<T>* pRoot;
-    Node<T>* pTail;
+    Node<T>* pRoot = nullptr;
+    Node<T>* pTail = nullptr;
 };
 
 #endif  // LIST_H_
